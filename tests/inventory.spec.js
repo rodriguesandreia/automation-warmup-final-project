@@ -1,11 +1,10 @@
 import { test, expect } from "@playwright/test";
 import { products } from "./data/inventory.data";
+import { goToInventory } from "./utils/helpers";
 
 test("Add product", async ({ page }) => {
-  await page.goto("/store");
-  await expect(page.getByTestId("instructions-title")).toBeVisible();
-  await page.getByTestId("store-tab-inventory").click();
-  await expect(page.getByTestId("inventory-title")).toBeVisible();
+
+  await goToInventory(page);
 
   await test.step("Fill in", async () => {
     await page.getByTestId("inventory-input-name").fill(products.bananas.name);
@@ -35,14 +34,11 @@ test("Add product", async ({ page }) => {
 });
 
 test("Increase quantity", async ({ page }) => {
-  await page.goto("/store");
-  await expect(page.getByTestId("instructions-title")).toBeVisible();
-  await page.getByTestId("store-tab-inventory").click();
-  await expect(page.getByTestId("inventory-title")).toBeVisible();
+  
+  await goToInventory(page);
 
   if (page.getByTestId("inventory-product-0")) {
     const iniQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
-    console.log(iniQuant);
     await page.getByTestId("inventory-product-increase-0").click();
     const finQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
     expect (Number(finQuant)).toBeGreaterThan(Number(iniQuant));
@@ -50,14 +46,11 @@ test("Increase quantity", async ({ page }) => {
 });
 
 test("Decrease quantity", async ({ page }) => {
-  await page.goto("/store");
-  await expect(page.getByTestId("instructions-title")).toBeVisible();
-  await page.getByTestId("store-tab-inventory").click();
-  await expect(page.getByTestId("inventory-title")).toBeVisible();
+
+  await goToInventory(page);
 
   if (page.getByTestId("inventory-product-0")) {
     const initQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
-    console.log(initQuant);
     await page.getByTestId("inventory-product-decrease-0").click();
     const finQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
     expect (Number(finQuant)).toBeLessThan(Number(initQuant));
