@@ -41,7 +41,8 @@ test("Increase quantity", async ({ page }) => {
     const iniQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
     await page.getByTestId("inventory-product-increase-0").click();
     const finQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
-    expect (Number(finQuant)).toBeGreaterThan(Number(iniQuant));
+    
+    expect (Number(finQuant)).toBe(Number(iniQuant)+1);
   }
 });
 
@@ -53,6 +54,18 @@ test("Decrease quantity", async ({ page }) => {
     const initQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
     await page.getByTestId("inventory-product-decrease-0").click();
     const finQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
-    expect (Number(finQuant)).toBeLessThan(Number(initQuant));
+    expect (Number(finQuant)).toBe(Number(initQuant)-1);
+  }
+});
+
+test("Never go below 0", async ({ page }) => {
+
+  await goToInventory(page);
+
+  if (page.getByTestId("inventory-product-6")) {
+    const initQuant = await page.getByTestId("inventory-product-quantity-6").innerText();
+    await page.getByTestId("inventory-product-decrease-6").click();
+    const finQuant = await page.getByTestId("inventory-product-quantity-6").innerText();
+    expect (Number(finQuant)).toBe(Number(initQuant));
   }
 });
