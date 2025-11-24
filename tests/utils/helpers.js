@@ -72,7 +72,28 @@ export async function add2ToCart(page) {
       // click add to cart
       await page.getByTestId("catalog-item-add-button-1").click();
 
-      return {productName1, productName2, productPrice1, productPrice2};
+      return { productName1, productName2, productPrice1, productPrice2 };
     }
   }
+}
+
+export async function goToPaymentWithItem(page) {
+  // add to cart
+  await goToCatalog(page);
+  if (page.getByTestId("catalog-item-quantity-0") != 0) {
+  // click add to cart
+  await page.getByTestId("catalog-item-add-button-0").click();
+  
+  }
+
+  // go to cart
+  await page.getByTestId("store-tab-cart").click();
+    await expect(page.getByTestId("cart-title")).toBeVisible();
+
+  // go to payment page
+  await page.getByTestId("cart-go-to-payment").click();
+  await expect(page.getByTestId("payment-title")).toBeVisible();
+
+  // validate item exists on payment page
+  await expect(page.getByTestId("payment-cart-item-0")).toBeVisible();
 }

@@ -35,39 +35,60 @@ test("Add product", async ({ page }) => {
 
 test("Increase quantity", async ({ page }) => {
   
-  await goToInventory(page);
+  await test.step("Go to Inventory page", async () => {
+    await goToInventory(page);
+  });
 
-  if (page.getByTestId("inventory-product-0")) {
-    const iniQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
-    await page.getByTestId("inventory-product-increase-0").click();
-    const finQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
-    
-    expect (Number(finQuant)).toBe(Number(iniQuant)+1);
-  }
+  await test.step("Increase product quantity", async () => {
+    if (page.getByTestId("inventory-product-0")) {
+      const iniQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
+      await page.getByTestId("inventory-product-increase-0").click();
+      const finQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
+
+      expect(Number(finQuant)).toBe(Number(iniQuant) + 1);
+    }
+  });
 });
+
 
 test("Decrease quantity", async ({ page }) => {
 
-  await goToInventory(page);
+  await test.step("Go to Inventory page", async () => {
+    await goToInventory(page);
+  });
 
-   // verify if the product exists & its quantity is 0
-  if (page.getByTestId("inventory-product-0") && Number(page.getByTestId("inventory-product-quantity-0").innerText()) > 0) {
-    const initQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
-    await page.getByTestId("inventory-product-decrease-0").click();
-    const finQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
-    expect (Number(finQuant)).toBe(Number(initQuant)-1);
-  }
+  await test.step("Decrease product quantity", async () => {
+    if (
+      page.getByTestId("inventory-product-0") &&
+      Number(await page.getByTestId("inventory-product-quantity-0").innerText()) > 0
+    ) {
+      const initQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
+      await page.getByTestId("inventory-product-decrease-0").click();
+      const finQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
+
+      expect(Number(finQuant)).toBe(Number(initQuant) - 1);
+    }
+  });
 });
+
 
 test("Never go below 0", async ({ page }) => {
 
-  await goToInventory(page);
+  await test.step("Go to Inventory page", async () => {
+    await goToInventory(page);
+  });
 
-  // verify if the product exists & its quantity is 0
-  if (page.getByTestId("inventory-product-6") && Number(page.getByTestId("inventory-product-quantity-0").innerText()) == 0) {
-    const initQuant = await page.getByTestId("inventory-product-quantity-6").innerText();
-    await page.getByTestId("inventory-product-decrease-6").click();
-    const finQuant = await page.getByTestId("inventory-product-quantity-6").innerText();
-    expect (Number(finQuant)).toBe(Number(initQuant));
-  }
+  await test.step("Try decreasing quantity below 0", async () => {
+    if (
+      page.getByTestId("inventory-product-6") &&
+      Number(await page.getByTestId("inventory-product-quantity-0").innerText()) === 0
+    ) {
+      const initQuant = await page.getByTestId("inventory-product-quantity-6").innerText();
+      await page.getByTestId("inventory-product-decrease-6").click();
+      const finQuant = await page.getByTestId("inventory-product-quantity-6").innerText();
+
+      expect(Number(finQuant)).toBe(Number(initQuant)); // should remain 0
+    }
+  });
 });
+

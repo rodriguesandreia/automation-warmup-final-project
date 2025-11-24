@@ -2,103 +2,138 @@ import { test, expect } from "@playwright/test";
 import { addToCart, add2ToCart } from "./utils/helpers";
 
 test("One item on cart", async ({ page }) => {
-  // add to cart
-  await addToCart(page);
-  //import product name and product price from addToCart function
-  const { productName, productPrice } = await addToCart(page);
+  // Add product to cart + get product data
+  const { productName, productPrice } =
+    await test.step("Add product to cart", async () => {
+      return await addToCart(page);
+    });
 
-  //navigate to cart
-  await page.getByTestId("store-tab-cart").click();
-  await expect(page.getByTestId("cart-title")).toBeVisible();
+  await test.step("Navigate to cart page", async () => {
+    await page.getByTestId("store-tab-cart").click();
+    await expect(page.getByTestId("cart-title")).toBeVisible();
+  });
 
-  //verify name
-  expect(await page.getByTestId("cart-item-name-0").innerText()).toBe(
-    productName
-  );
+  await test.step("Validate product name in cart", async () => {
+    const name = await page.getByTestId("cart-item-name-0").innerText();
+    expect(name).toBe(productName);
+  });
 
-  //verify quantity
-  const quantity = Number(
-    await page.getByTestId("cart-item-quantity-0").innerText()
-  );
-  expect(quantity).toBe(1);
+  await test.step("Validate product quantity", async () => {
+    const quantity = Number(
+      await page.getByTestId("cart-item-quantity-0").innerText()
+    );
+    expect(quantity).toBe(1);
+  });
 
-  //verify price
-  expect(
-    Number(await page.getByTestId("cart-item-price-value-0").innerText())
-  ).toBe(productPrice);
+  await test.step("Validate product price", async () => {
+    const price = Number(
+      await page.getByTestId("cart-item-price-value-0").innerText()
+    );
+    expect(price).toBe(productPrice);
+  });
 
-  //verify subtotal & total - as only one item was added, the total and subtotal are the same
-  const total = productPrice * quantity;
-  expect(
-    Number(await page.getByTestId("cart-item-total-value-0").innerText())
-  ).toBe(total);
-  expect(Number(await page.getByTestId("cart-total-value").innerText())).toBe(
-    total
-  );
+  await test.step("Validate subtotal and total", async () => {
+    const quantity = 1;
+    const expectedTotal = productPrice * quantity;
+
+    const itemTotal = Number(
+      await page.getByTestId("cart-item-total-value-0").innerText()
+    );
+    expect(itemTotal).toBe(expectedTotal);
+
+    const cartTotal = Number(
+      await page.getByTestId("cart-total-value").innerText()
+    );
+    expect(cartTotal).toBe(expectedTotal);
+  });
 });
 
 test("Two items on cart", async ({ page }) => {
-  // add two items to cart
-  await add2ToCart(page);
-  //import product name and product price from addToCart function
+  // Add products to cart + get products data
   const { productName1, productName2, productPrice1, productPrice2 } =
-    await add2ToCart(page);
+    await test.step("Add two products to cart", async () => {
+      return await add2ToCart(page);
+    });
 
-  //navigate to cart
-  await page.getByTestId("store-tab-cart").click();
+  await test.step("Navigate to cart page", async () => {
+    await page.getByTestId("store-tab-cart").click();
+    await expect(page.getByTestId("cart-title")).toBeVisible();
+  });
 
-  //verify names
-  await expect(page.getByTestId("cart-title")).toBeVisible();
-  expect(await page.getByTestId("cart-item-name-0").innerText()).toBe(
-    productName1
-  );
-  expect(await page.getByTestId("cart-item-name-1").innerText()).toBe(
-    productName2
-  );
+  await test.step("Validate product names", async () => {
+    const name1 = await page.getByTestId("cart-item-name-0").innerText();
+    expect(name1).toBe(productName1);
 
-  //verify quantity - quantities are 1 for both items as only one of each item was added to the cart
-  const quantity1 = Number(
-    await page.getByTestId("cart-item-quantity-0").innerText()
-  );
-  expect(quantity1).toBe(1);
+    const name2 = await page.getByTestId("cart-item-name-1").innerText();
+    expect(name2).toBe(productName2);
+  });
 
-  const quantity2 = Number(
-    await page.getByTestId("cart-item-quantity-1").innerText()
-  );
-  expect(quantity2).toBe(1);
+  await test.step("Validate quantities", async () => {
+    const quantity1 = Number(
+      await page.getByTestId("cart-item-quantity-0").innerText()
+    );
+    expect(quantity1).toBe(1);
 
-  //verify subtotals
-  const subtotal1 = productPrice1 * quantity1;
-  const subtotal2 = productPrice2 * quantity2;
-  expect(
-    Number(await page.getByTestId("cart-item-total-value-0").innerText())
-  ).toBe(subtotal1);
-  expect(
-    Number(await page.getByTestId("cart-item-total-value-1").innerText())
-  ).toBe(subtotal2);
+    const quantity2 = Number(
+      await page.getByTestId("cart-item-quantity-1").innerText()
+    );
+    expect(quantity2).toBe(1);
+  });
 
-  //verify total
-  const total = subtotal1 + subtotal2;
-  expect(Number(await page.getByTestId("cart-total-value").innerText())).toBe(
-    total
-  );
+  await test.step("Validate item subtotals", async () => {
+    const quantity1 = 1;
+    const quantity2 = 1;
+
+    const subtotal1 = productPrice1 * quantity1;
+    const subtotal2 = productPrice2 * quantity2;
+
+    const cartSubtotal1 = Number(
+      await page.getByTestId("cart-item-total-value-0").innerText()
+    );
+    expect(cartSubtotal1).toBe(subtotal1);
+
+    const cartSubtotal2 = Number(
+      await page.getByTestId("cart-item-total-value-1").innerText()
+    );
+    expect(cartSubtotal2).toBe(subtotal2);
+  });
+
+  //Validate final cart total
+  await test.step("Validate total amount", async () => {
+    const quantity1 = 1;
+    const quantity2 = 1;
+
+    const subtotal1 = productPrice1 * quantity1;
+    const subtotal2 = productPrice2 * quantity2;
+    const expectedTotal = subtotal1 + subtotal2;
+
+    const cartTotal = Number(
+      await page.getByTestId("cart-total-value").innerText()
+    );
+
+    expect(cartTotal).toBe(expectedTotal);
+  });
 });
 
 test("Go to payment", async ({ page }) => {
-  // add to cart
-  await addToCart(page);
+  await test.step("Add to cart", async () => {
+    await addToCart(page);
+  });
 
-  //navigate to cart
-  await page.getByTestId("store-tab-cart").click();
-  await expect(page.getByTestId("cart-title")).toBeVisible();
+  await test.step("Navigate to cart", async () => {
+    await page.getByTestId("store-tab-cart").click();
+    await expect(page.getByTestId("cart-title")).toBeVisible();
+  });
 
-  //verify the item exists
-  expect(await page.getByTestId("cart-item-0").toBeVisible);
+  await test.step("Verify item exists in cart", async () => {
+    await expect(page.getByTestId("cart-item-0")).toBeVisible();
+  });
 
-  //click Go to payments
-  await page.getByTestId("cart-go-to-payment").click();
+  await test.step("Click Go to payments", async () => {
+    await page.getByTestId("cart-go-to-payment").click();
+  });
 
-  //verify the payment page opened
-  await expect(page.getByTestId("payment-title")).toBeVisible();
-
+  await test.step("Verify payment page opened", async () => {
+    await expect(page.getByTestId("payment-title")).toBeVisible();
+  });
 });
