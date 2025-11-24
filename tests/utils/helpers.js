@@ -3,7 +3,7 @@ import { expect } from "@playwright/test";
 export async function goToInventory(page) {
   // Navigate to the inventory page and confirm we are there.
   // Only perform a full navigation if we're not already on the store page.
-  if (!page.url().includes('/store')) {
+  if (!page.url().includes("/store")) {
     await page.goto("/store");
     await expect(page.getByTestId("instructions-title")).toBeVisible();
   }
@@ -15,7 +15,7 @@ export async function goToInventory(page) {
 export async function goToCatalog(page) {
   // Navigate to the catalog page and confirm we are there.
   // Only perform a full navigation if we're not already on the store page.
-  if (!page.url().includes('/store')) {
+  if (!page.url().includes("/store")) {
     await page.goto("/store");
     await expect(page.getByTestId("instructions-title")).toBeVisible();
   }
@@ -27,7 +27,7 @@ export async function goToCatalog(page) {
 export async function goToCart(page) {
   // Navigate to the cart page and confirm we are there.
   // Only perform a full navigation if we're not already on the store page.
-  if (!page.url().includes('/store')) {
+  if (!page.url().includes("/store")) {
     await page.goto("/store");
     await expect(page.getByTestId("instructions-title")).toBeVisible();
   }
@@ -106,7 +106,6 @@ export async function goToPaymentWithItem(page) {
 }
 
 export async function makeOrder(page) {
-
   const { productName, productPrice } = await goToPaymentWithItem(page);
 
   // select payment method
