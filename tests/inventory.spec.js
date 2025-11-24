@@ -2,9 +2,12 @@ import { test, expect } from "@playwright/test";
 import { products } from "./data/inventory.data";
 import { goToInventory } from "./utils/helpers";
 
-test("Add product", async ({ page }) => {
+test.describe("Inventory tests", () => {
+  test.beforeEach(async ({ page }) => {
+    await goToInventory(page);
+  });
 
-  await goToInventory(page);
+test("Add product", async ({ page }) => {
 
   await test.step("Fill in", async () => {
     await page.getByTestId("inventory-input-name").fill(products.bananas.name);
@@ -35,14 +38,12 @@ test("Add product", async ({ page }) => {
 
 test("Increase quantity", async ({ page }) => {
   
-  await goToInventory(page);
-
   if (page.getByTestId("inventory-product-0")) {
-    const iniQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
+    const initQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
     await page.getByTestId("inventory-product-increase-0").click();
     const finQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
     
-    expect (Number(finQuant)).toBe(Number(iniQuant)+1);
+    expect(Number(finQuant)).toBe(Number(initQuant)+1);
   }
 });
 
@@ -55,7 +56,8 @@ test("Decrease quantity", async ({ page }) => {
     const initQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
     await page.getByTestId("inventory-product-decrease-0").click();
     const finQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
-    expect (Number(finQuant)).toBe(Number(initQuant)-1);
+    
+    expect(Number(finQuant)).toBe(Number(initQuant)-1);
   }
 });
 
@@ -68,6 +70,8 @@ test("Never go below 0", async ({ page }) => {
     const initQuant = await page.getByTestId("inventory-product-quantity-6").innerText();
     await page.getByTestId("inventory-product-decrease-6").click();
     const finQuant = await page.getByTestId("inventory-product-quantity-6").innerText();
-    expect (Number(finQuant)).toBe(Number(initQuant));
+    
+    expect(Number(finQuant)).toBe(Number(initQuant));
   }
+});
 });
