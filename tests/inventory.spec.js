@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { products } from "./data/inventory.data";
-import { goToInventory } from "./utils/helpers";
+import { goToInventory } from "./utils/helpers.js";
 
 test("Add product", async ({ page }) => {
 
@@ -91,4 +91,3 @@ test("Never go below 0", async ({ page }) => {
     }
   });
 });
-

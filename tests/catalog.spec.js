@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import {goToCatalog } from "./utils/helpers";
+import {goToCatalog } from "./utils/helpers.js";
 
 test("Add to Cart", async ({ page }) => {
   await goToCatalog(page);
@@ -7,7 +7,7 @@ test("Add to Cart", async ({ page }) => {
     const productName = await page
       .getByTestId("catalog-item-name-0")
       .innerText();
-      
+
     await test.step("Click add to cart", async () => {
       const iniQuant = await page
         .getByTestId("catalog-item-quantity-0")

@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { addToCart, add2ToCart } from "./utils/helpers";
+import { addToCart, add2ToCart } from "./utils/helpers.js";
 
 test("One item on cart", async ({ page }) => {
   // Add product to cart + get product data

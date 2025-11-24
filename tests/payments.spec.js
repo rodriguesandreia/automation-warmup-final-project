@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { addToCart, goToPaymentWithItem } from "./utils/helpers";
+import { addToCart, goToPaymentWithItem } from "./utils/helpers.js";
 
 test("Validate payment summary", async ({ page }) => {
   const { productName, productPrice } =
