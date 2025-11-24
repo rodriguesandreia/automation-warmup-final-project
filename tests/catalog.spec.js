@@ -1,8 +1,13 @@
 import { test, expect } from "@playwright/test";
-import {goToCatalog } from "./utils/helpers.js";
+import { goToCatalog } from "./utils/helpers.js";
+
+test.describe("Catalog tests", () => {
+// Run goToCatalog before each test in this file
+test.beforeEach(async ({ page }) => {
+  await goToCatalog(page);
+});
 
 test("Add to Cart", async ({ page }) => {
-  await goToCatalog(page);
   if (page.getByTestId("catalog-item-quantity-0") != 0) {
     const productName = await page
       .getByTestId("catalog-item-name-0")
@@ -30,10 +35,7 @@ test("Add to Cart", async ({ page }) => {
 });
 
 test("Out of stock items", async ({ page }) => {
-
-  await test.step("Go to Catalog page", async () => {
-    await goToCatalog(page);
-  });
+  // catalog page is visited in beforeEach
 
   let outOfStockid;
 
@@ -57,4 +59,4 @@ test("Out of stock items", async ({ page }) => {
     await expect(page.getByTestId(buttonOutOfStock)).toBeDisabled();
   });
 });
-
+});
