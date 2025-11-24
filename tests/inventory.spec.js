@@ -89,4 +89,3 @@ test.describe("Inventory tests", () => {
     });
   });
 });
-});
