@@ -3,8 +3,6 @@ import { makeOrder} from "./utils/helpers.js";
 
 test("Validate order details", async ({ page }) => {
 
-  await makeOrder(page);
-
     const { productName, productPrice } =
       await test.step("Make an order", async () => {
         return await makeOrder(page);

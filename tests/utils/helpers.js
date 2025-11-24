@@ -90,14 +90,7 @@ export async function add2ToCart(page) {
 }
 
 export async function goToPaymentWithItem(page) {
-  // add to cart
-  await addToCart(page);
-    const productName = await page
-        .getByTestId("catalog-item-name-0")
-        .innerText();
-      const productPrice = Number(
-        await page.getByTestId("catalog-item-price-value-0").innerText()
-      );
+  const { productName, productPrice } = await addToCart(page);
   // go to cart
   await page.getByTestId("store-tab-cart").click();
   await expect(page.getByTestId("cart-title")).toBeVisible();
@@ -109,7 +102,7 @@ export async function goToPaymentWithItem(page) {
   // validate item exists on payment page
   await expect(page.getByTestId("payment-cart-item-0")).toBeVisible();
 
-  return {productName, productPrice};
+  return { productName, productPrice };
 }
 
 export async function makeOrder(page) {
