@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
-import {goToCatalog } from "./utils/helpers";
+import { products } from "./data/inventory.data";
+import { goToCart, goToCatalog, goToInventory } from "./utils/helpers";
 
 test("Add to Cart", async ({ page }) => {
   await goToCatalog(page);
