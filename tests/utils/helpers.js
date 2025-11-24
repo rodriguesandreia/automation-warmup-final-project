@@ -37,7 +37,7 @@ export async function goToCart(page) {
 }
 
 export async function addToCart(page) {
-  // Navigate to the cart page and confirm we are there
+  // Navigate to the Catalog page and confirm we are there
   await goToCatalog(page);
   if (page.getByTestId("catalog-item-quantity-0") != 0) {
     // store name & price
@@ -57,7 +57,7 @@ export async function addToCart(page) {
 }
 
 export async function add2ToCart(page) {
-  // Navigate to the cart page and confirm we are there
+  // Navigate to the Catalog page and confirm we are there
   await goToCatalog(page);
 
   if (page.getByTestId("catalog-item-quantity-0") != 0) {
