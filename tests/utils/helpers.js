@@ -17,9 +17,13 @@ export async function goToCatalog(page) {
 }
 
 export async function goToCart(page) {
-  // Navigate to the cart page and confirm we are there
-  await page.goto("/store");
-  await expect(page.getByTestId("instructions-title")).toBeVisible();
+  // Navigate to the cart page and confirm we are there.
+  // Only perform a full navigation if we're not already on the store page.
+  if (!page.url().includes('/store')) {
+    await page.goto("/store");
+    await expect(page.getByTestId("instructions-title")).toBeVisible();
+  }
+
   await page.getByTestId("store-tab-cart").click();
   await expect(page.getByTestId("cart-title")).toBeVisible();
 }
@@ -83,7 +87,6 @@ export async function goToPaymentWithItem(page) {
   if (page.getByTestId("catalog-item-quantity-0") != 0) {
   // click add to cart
   await page.getByTestId("catalog-item-add-button-0").click();
-  
   }
 
   // go to cart

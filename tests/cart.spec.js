@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { addToCart, add2ToCart } from "./utils/helpers.js";
+import { addToCart, add2ToCart, goToCart } from "./utils/helpers.js";
 
-test("One item on cart", async ({ page }) => {
+test("One item in cart", async ({ page }) => {
   // Add product to cart + get product data
   const { productName, productPrice } =
     await test.step("Add product to cart", async () => {
@@ -9,8 +9,7 @@ test("One item on cart", async ({ page }) => {
     });
 
   await test.step("Navigate to cart page", async () => {
-    await page.getByTestId("store-tab-cart").click();
-    await expect(page.getByTestId("cart-title")).toBeVisible();
+    await goToCart(page);
   });
 
   await test.step("Validate product name in cart", async () => {
@@ -48,7 +47,7 @@ test("One item on cart", async ({ page }) => {
   });
 });
 
-test("Two items on cart", async ({ page }) => {
+test("Two items in cart", async ({ page }) => {
   // Add products to cart + get products data
   const { productName1, productName2, productPrice1, productPrice2 } =
     await test.step("Add two products to cart", async () => {
@@ -56,8 +55,7 @@ test("Two items on cart", async ({ page }) => {
     });
 
   await test.step("Navigate to cart page", async () => {
-    await page.getByTestId("store-tab-cart").click();
-    await expect(page.getByTestId("cart-title")).toBeVisible();
+    await goToCart(page);
   });
 
   await test.step("Validate product names", async () => {
@@ -121,8 +119,7 @@ test("Go to payment", async ({ page }) => {
   });
 
   await test.step("Navigate to cart", async () => {
-    await page.getByTestId("store-tab-cart").click();
-    await expect(page.getByTestId("cart-title")).toBeVisible();
+    await goToCart(page);
   });
 
   await test.step("Verify item exists in cart", async () => {
