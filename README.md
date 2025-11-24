@@ -14,5 +14,5 @@ We've decided to go with a Data-Driven approach.
 
 ## Organization
 
-- Structure: Adding utilitary functions to incorporate repetitive logic and thus improving legibility
-- GitHub // Branches: Each tab on the page
+- Structure
+- GitHub // Branches

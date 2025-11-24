@@ -1,7 +1,7 @@
 import { expect } from "@playwright/test";
 
 export async function goToInventory(page) {
-    // Navigate to the inventory page and confirm we are there
+  // Navigate to the inventory page and confirm we are there
   await page.goto("/store");
   await expect(page.getByTestId("instructions-title")).toBeVisible();
   await page.getByTestId("store-tab-inventory").click();
