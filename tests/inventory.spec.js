@@ -49,7 +49,10 @@ test("Increase quantity", async ({ page }) => {
 
 test("Decrease quantity", async ({ page }) => {
 
-  if (page.getByTestId("inventory-product-0")) {
+  await goToInventory(page);
+
+   // verify if the product exists & its quantity is 0
+  if (page.getByTestId("inventory-product-0") && Number(page.getByTestId('inventory-product-quantity-0').innerText()) > 0) {
     const initQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
     await page.getByTestId("inventory-product-decrease-0").click();
     const finQuant = await page.getByTestId("inventory-product-quantity-0").innerText();
@@ -60,7 +63,10 @@ test("Decrease quantity", async ({ page }) => {
 
 test("Never go below 0", async ({ page }) => {
 
-  if (page.getByTestId("inventory-product-6")) {
+  await goToInventory(page);
+
+  // verify if the product exists & its quantity is 0
+  if (page.getByTestId("inventory-product-6") && Number(page.getByTestId('inventory-product-quantity-0').innerText()) == 0) {
     const initQuant = await page.getByTestId("inventory-product-quantity-6").innerText();
     await page.getByTestId("inventory-product-decrease-6").click();
     const finQuant = await page.getByTestId("inventory-product-quantity-6").innerText();
