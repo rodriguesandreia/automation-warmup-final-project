@@ -79,16 +79,16 @@ export async function add2ToCart(page) {
 
 export async function goToPaymentWithItem(page) {
   // add to cart
-  await goToCatalog(page);
-  if (page.getByTestId("catalog-item-quantity-0") != 0) {
-  // click add to cart
-  await page.getByTestId("catalog-item-add-button-0").click();
-  
-  }
-
+  await addToCart(page);
+    const productName = await page
+        .getByTestId("catalog-item-name-0")
+        .innerText();
+      const productPrice = Number(
+        await page.getByTestId("catalog-item-price-value-0").innerText()
+      );
   // go to cart
   await page.getByTestId("store-tab-cart").click();
-    await expect(page.getByTestId("cart-title")).toBeVisible();
+  await expect(page.getByTestId("cart-title")).toBeVisible();
 
   // go to payment page
   await page.getByTestId("cart-go-to-payment").click();
@@ -96,4 +96,23 @@ export async function goToPaymentWithItem(page) {
 
   // validate item exists on payment page
   await expect(page.getByTestId("payment-cart-item-0")).toBeVisible();
+
+  return {productName, productPrice};
+}
+
+export async function makeOrder(page) {
+
+  const { productName, productPrice } = await goToPaymentWithItem(page);
+
+  // select payment method
+  await page.getByTestId("payment-method-input-MBWay").click();
+
+  // click confirm button
+  await page.getByTestId("payment-confirm-button").click();
+
+  //check if the the Order page opens and the order is there
+  await expect(page.getByTestId("orders-title")).toBeVisible();
+  await expect(page.getByTestId("order-0")).toBeVisible();
+
+  return { productName, productPrice };
 }
