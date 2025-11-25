@@ -29,8 +29,14 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('')`. */
      baseURL: 'https://playground-drab-six.vercel.app',
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+       // Take a screenshot only if the test fails
+    screenshot: 'only-on-failure',
+
+    // Save video only if the test fails
+    video: 'retain-on-failure',
+
+    // Save trace only if the test fails 
+    trace: 'retain-on-failure',
   },
 
   /* Configure projects for major browsers */
