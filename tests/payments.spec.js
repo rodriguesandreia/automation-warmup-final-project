@@ -1,5 +1,11 @@
 import { test, expect } from "@playwright/test";
-import { addToCart, goToPaymentWithItem } from "./utils/helpers.js";
+import {
+  addToCart,
+  goToPaymentWithItem,
+  getPaymentMethods,
+} from "./utils/helpers.js";
+
+// Getting the payment methods
 
 test("Validate payment summary", async ({ page }) => {
   const { productName, productPrice } =
@@ -50,6 +56,40 @@ test("Validate payment summary", async ({ page }) => {
       await page.getByTestId("payment-total-value").innerText()
     );
     expect(paymentTotal).toBe(total);
+  });
+});
+
+test.describe("Dynamic payment tests", () => {
+  let paymentMethods = [];
+  test.beforeEach(async ({ page }) => {
+    await goToPaymentWithItem(page);
+    paymentMethods = await getPaymentMethods(page);
+  });
+  // Separate test for each payment method
+  paymentMethods.forEach((method) => {
+    test(`Payment method: ${method}`, async ({ page }) => {
+      const locator = page.getByTestId(`payment-method-input-${method}`);
+
+      await test.step("Go to payment page with an item", async () => {
+        await goToPaymentWithItem(page);
+      });
+
+      await test.step("Select MBWay", async () => {
+        await locator.click();
+      });
+
+      await test.step("Click confirm payment button", async () => {
+        await page.getByTestId("payment-confirm-button").click();
+      });
+
+      await test.step("Verify order on Orders tab", async () => {
+        await expect(page.getByTestId("orders-title")).toBeVisible();
+        await expect(page.getByTestId("order-0")).toBeVisible();
+      });
+
+      // Example assertion: check that the payment method is selected
+      expect(await locator.isChecked()).toBeTruthy();
+    });
   });
 });
 
