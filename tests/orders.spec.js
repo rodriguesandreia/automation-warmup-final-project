@@ -1,11 +1,28 @@
 import { test, expect } from "@playwright/test";
-import { makeOrder } from "./utils/helpers.js";
+import { makeOrder, getOrderItemInfo } from "./utils/helpers.js";
 
 test("Validate order details", async ({ page }) => {
-  const { productName, productPrice } =
+  const { productName, productPrice, orderDate, paymentMethod } =
     await test.step("Make an order", async () => {
       return await makeOrder(page);
     });
+
+    await test.step("Validate date", async () => {
+    expect(await page.getByTestId('order-date-0').innerText()).toBe(`Date: ${orderDate}`);
+  });
+
+  await test.step("Validate payment method", async () => {
+    expect(await page.getByTestId("order-payment-0").innerText()).toBe(
+      `Payment Method: ${paymentMethod}`
+    );
+  });
+
+  await test.step("Validate product name & quantity", async () => {
+    const { orderQuantity, orderName } = await getOrderItemInfo(page, 0, 0);
+    expect(orderName).toBe(productName);
+    //quantity is 1 as only 1 item was added to the cart
+    expect(orderQuantity).toBe(1);
+  });
 
   await test.step("Validate product price", async () => {
     const price = Number(
@@ -29,20 +46,4 @@ test("Validate order details", async ({ page }) => {
     );
     expect(paymentTotal).toBe(total);
   });
-
-  // does not work from this point foward
-
-  //     // not working because the components name and quantity are truncated into one
-  //        await test.step("Validate product name", async () => {
-  //     const name = await page.getByTestId('order-item-name-0-0').innerText();
-  //     expect(name).toBe(productName);
-  //   });
-
-  //     // not working because the components name and quantity are truncated into one
-  //   await test.step("Validate product quantity", async () => {
-  //     const quantity = Number(
-  //       await page.getByTestId("payment-item-quantity-0").innerText()
-  //     );
-  //     expect(quantity).toBe(1);
-  //   });
 });

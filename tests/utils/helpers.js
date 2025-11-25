@@ -110,13 +110,37 @@ export async function makeOrder(page) {
 
   // select payment method
   await page.getByTestId("payment-method-input-MBWay").click();
-
+  const paymentMethod = await page
+    .getByTestId("payment-method-input-MBWay")
+    .inputValue();
   // click confirm button
   await page.getByTestId("payment-confirm-button").click();
+
+  const now = new Date();
+  // format date to match the order's screen
+  const orderDate =
+    now.toLocaleDateString("en-US") +
+    ", " +
+    now.toLocaleTimeString("en-US", { hour12: true });
 
   //check if the the Order page opens and the order is there
   await expect(page.getByTestId("orders-title")).toBeVisible();
   await expect(page.getByTestId("order-0")).toBeVisible();
 
-  return { productName, productPrice };
+  return { productName, productPrice, orderDate, paymentMethod };
+}
+
+export async function getOrderItemInfo(page, row = 0, col = 0) {
+  // Build the test ID dynamically
+  const locator = page.getByTestId(`order-item-name-${row}-${col}`);
+
+  // Get text
+  const rawText = await locator.innerText();
+
+  // Split into quantity + product name
+  const [quantityStr, ...nameParts] = rawText.split(" x ");
+  const orderQuantity = Number(quantityStr);
+  const orderName = nameParts.join(" x ");
+
+  return { orderQuantity, orderName };
 }
