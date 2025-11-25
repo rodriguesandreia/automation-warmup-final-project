@@ -7,8 +7,10 @@ test("Validate order details", async ({ page }) => {
       return await makeOrder(page);
     });
 
-    await test.step("Validate date", async () => {
-    expect(await page.getByTestId('order-date-0').innerText()).toBe(`Date: ${orderDate}`);
+  await test.step("Validate date", async () => {
+    expect(await page.getByTestId("order-date-0").innerText()).toBe(
+      `Date: ${orderDate}`
+    );
   });
 
   await test.step("Validate payment method", async () => {
