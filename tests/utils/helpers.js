@@ -120,3 +120,18 @@ export async function makeOrder(page) {
 
   return { productName, productPrice };
 }
+
+export async function getOrderItemInfo(page, row = 0, col = 0) {
+  // Build the test ID dynamically
+  const locator = page.getByTestId(`order-item-name-${row}-${col}`);
+
+  // Get text
+  const rawText = await locator.innerText();
+
+  // Split into quantity + product name
+  const [quantityStr, ...nameParts] = rawText.split(" x ");
+  const orderQuantity = Number(quantityStr);
+  const orderName = nameParts.join(" x ");
+
+  return { orderQuantity, orderName };
+}
