@@ -1,31 +1,43 @@
 import { expect } from "@playwright/test";
 
 export async function goToInventory(page) {
-  // Navigate to the inventory page and confirm we are there
-  await page.goto("/store");
-  await expect(page.getByTestId("instructions-title")).toBeVisible();
+  // Navigate to the inventory page and confirm we are there.
+  // Only perform a full navigation if we're not already on the store page.
+  if (!page.url().includes("/store")) {
+    await page.goto("/store");
+    await expect(page.getByTestId("instructions-title")).toBeVisible();
+  }
+
   await page.getByTestId("store-tab-inventory").click();
   await expect(page.getByTestId("inventory-title")).toBeVisible();
 }
 
 export async function goToCatalog(page) {
-  // Navigate to the catalog page and confirm we are there
-  await page.goto("/store");
-  await expect(page.getByTestId("instructions-title")).toBeVisible();
+  // Navigate to the catalog page and confirm we are there.
+  // Only perform a full navigation if we're not already on the store page.
+  if (!page.url().includes("/store")) {
+    await page.goto("/store");
+    await expect(page.getByTestId("instructions-title")).toBeVisible();
+  }
+
   await page.getByTestId("store-tab-catalog").click();
   await expect(page.getByTestId("catalog-title")).toBeVisible();
 }
 
 export async function goToCart(page) {
-  // Navigate to the cart page and confirm we are there
-  await page.goto("/store");
-  await expect(page.getByTestId("instructions-title")).toBeVisible();
+  // Navigate to the cart page and confirm we are there.
+  // Only perform a full navigation if we're not already on the store page.
+  if (!page.url().includes("/store")) {
+    await page.goto("/store");
+    await expect(page.getByTestId("instructions-title")).toBeVisible();
+  }
+
   await page.getByTestId("store-tab-cart").click();
   await expect(page.getByTestId("cart-title")).toBeVisible();
 }
 
 export async function addToCart(page) {
-  // Navigate to the cart page and confirm we are there
+  // Navigate to the Catalog page and confirm we are there
   await goToCatalog(page);
   if (page.getByTestId("catalog-item-quantity-0") != 0) {
     // store name & price
@@ -45,7 +57,7 @@ export async function addToCart(page) {
 }
 
 export async function add2ToCart(page) {
-  // Navigate to the cart page and confirm we are there
+  // Navigate to the Catalog page and confirm we are there
   await goToCatalog(page);
 
   if (page.getByTestId("catalog-item-quantity-0") != 0) {
@@ -78,14 +90,7 @@ export async function add2ToCart(page) {
 }
 
 export async function goToPaymentWithItem(page) {
-  // add to cart
-  await addToCart(page);
-    const productName = await page
-        .getByTestId("catalog-item-name-0")
-        .innerText();
-      const productPrice = Number(
-        await page.getByTestId("catalog-item-price-value-0").innerText()
-      );
+  const { productName, productPrice } = await addToCart(page);
   // go to cart
   await page.getByTestId("store-tab-cart").click();
   await expect(page.getByTestId("cart-title")).toBeVisible();
@@ -97,11 +102,10 @@ export async function goToPaymentWithItem(page) {
   // validate item exists on payment page
   await expect(page.getByTestId("payment-cart-item-0")).toBeVisible();
 
-  return {productName, productPrice};
+  return { productName, productPrice };
 }
 
 export async function makeOrder(page) {
-
   const { productName, productPrice } = await goToPaymentWithItem(page);
 
   // select payment method
