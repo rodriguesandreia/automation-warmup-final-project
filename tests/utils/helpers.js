@@ -127,7 +127,7 @@ export async function makeOrder(page) {
   await expect(page.getByTestId("orders-title")).toBeVisible();
   await expect(page.getByTestId("order-0")).toBeVisible();
 
-  return { productName, productPrice };
+  return { productName, productPrice, orderDate, paymentMethod };
 }
 export async function getOrderItemInfo(page, row = 0, col = 0) {
   // Build the test ID dynamically
