@@ -1,11 +1,11 @@
 # Final Project - Store Module Test Automation
 
 This is the final assignment for the class _Test Automation Warm-Up with Playwright_. We will implement tests to cover the core Store features on the playground page: 
-- [ x ] Inventory
-- [ x ] Catalog
-- [ x ] Cart 
-- [ x ] Payment
-- [ ] Orders
+- [x] Inventory
+- [x] Catalog
+- [x] Cart 
+- [x] Payment
+- [x] Orders
 
 ## Project Setup
 
