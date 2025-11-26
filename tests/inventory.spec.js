@@ -3,7 +3,7 @@ import { products } from "./data/inventory.data";
 import { goToInventory } from "./utils/helpers.js";
 
 test.describe("Inventory tests", () => {
-  // Run goToInventory before each test
+  // Setup: Navigate to Inventory page before each test
   test.beforeEach(async ({ page }) => {
     await goToInventory(page);
   });

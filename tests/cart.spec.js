@@ -32,6 +32,7 @@ test("One item in cart", async ({ page }) => {
   });
 
   await test.step("Validate subtotal and total", async () => {
+    // Since only 1 item was added (quantity=1), subtotal equals item price
     const quantity = 1;
     const expectedTotal = productPrice * quantity;
 
@@ -98,6 +99,7 @@ test("Two items in cart", async ({ page }) => {
 
   //Validate final cart total
   await test.step("Validate total amount", async () => {
+    // Cart total = item1_subtotal + item2_subtotal (each item has quantity 1)
     const quantity1 = 1;
     const quantity2 = 1;
 
@@ -108,7 +110,6 @@ test("Two items in cart", async ({ page }) => {
     const cartTotal = Number(
       await page.getByTestId("cart-total-value").innerText()
     );
-
     expect(cartTotal).toBe(expectedTotal);
   });
 });
