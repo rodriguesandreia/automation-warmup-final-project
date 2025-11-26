@@ -120,18 +120,3 @@ export async function makeOrder(page) {
 
   return { productName, productPrice };
 }
-
-export async function getPaymentMethods(page) {
-  const methods = page.getByTestId(/payment-method-input-/);
-  const count = await methods.count();
-  const list = [];
-
-  for (let i = 0; i < count; i++) {
-    const id = await methods.nth(i).getAttribute("data-testid");
-    // create a list of the payment methods
-    const method = id.replace("payment-method-input-", "");
-    list.push(method);
-  }
-
-  return list;
-}
