@@ -129,7 +129,6 @@ export async function makeOrder(page) {
 
   return { productName, productPrice, orderDate, paymentMethod };
 }
-
 export async function getOrderItemInfo(page, row = 0, col = 0) {
   // Build the test ID dynamically
   const locator = page.getByTestId(`order-item-name-${row}-${col}`);
