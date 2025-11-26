@@ -16,3 +16,10 @@ We've decided to go with a Data-Driven approach.
 
 - Structure: Adding utilitary functions to incorporate repetitive logic and thus improving legibility
 - GitHub // Branches: Each tab has been addressed in a different branch and we merged it before going ahead on another one.
+
+
+## Test Run Instructions
+- Run npx playwright test to execute all tests.
+
+  or
+- Run npx playwright test --ui to open the Playwright Test Runner UI.
